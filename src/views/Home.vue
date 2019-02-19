@@ -1,3 +1,4 @@
+
 <template>              
   <div class="home"> 
     <h1>New Recipe</h1>
@@ -57,6 +58,7 @@
               Image URL: <input v-model="recipe.image_url">
             </div>
             <button v-on:click="updateRecipe(recipe)">Update Recipe</button>
+            <button v-on:click="destroyRecipe(recipe)">Delete Recipe</button>
           </div>
         </div>
       </div>
@@ -127,6 +129,15 @@ export default {
       axios.patch("/api/recipes/" + inputRecipe.id, params)
       .then( response => {
         console.log("Recipe Successfully Updated", response.data);
+        inputRecipe = response.data;
+      });
+    },
+    destroyRecipe: function(inputRecipe) {
+      axios.delete("/api/recipes/" + inputRecipe.id)
+      .then( response => {
+        console.log("Sucess.", response.data)
+        var index = this.recipes.indexOf(inputRecipe);  // Recipes are unique, finds the only one.
+        this.recipes.splice(index,1);       // starts at index, removes only one element.
       });
     }
   }
